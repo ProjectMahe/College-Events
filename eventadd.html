@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Add New Event</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Event Name -->
+    <div class="form-group">
+      <label for="event_name">Event Name </label>
+      <input type="text" class="form-control" id="event_name" name="event_name" required>
+    </div>
+
+    <!-- Event ID -->
+    <div class="form-group">
+      <label for="event_id">Event ID </label>
+      <input type="text" class="form-control" id="event_id" name="event_id" required>
+    </div>
+
+    <!-- Event Date -->
+    <div class="form-group">
+      <label for="event_date">Event Date </label>
+      <input type="date" class="form-control" id="event_date" name="event_date" required>
+    </div>
+
+    <!-- Event Mode -->
+<div class="form-group">
+  <label><strong>Event Mode *</strong></label>
+  <fieldset style="border: 2px solid #d3d3d3; padding: 15px; border-radius: 10px;">
+    <legend style="color: purple; font-weight: bold;">Select the event mode</legend>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+      <label>
+        <input type="radio" name="event_mode" value="in-person" required>
+        In-Person
+      </label>
+      
+      <label>
+        <input type="radio" name="event_mode" value="online" required>
+        Online
+      </label>
+      
+      <label>
+        <input type="radio" name="event_mode" value="hybrid" required>
+        Hybrid
+      </label>
+    </div>
+  </fieldset>
+</div>
+
+    <!-- Team or Single Participation -->
+    <div class="form-group">
+      <label for="team_type">Participation Type </label>
+      <select class="form-control" id="team_type" name="team_type" required onchange="toggleTeamSize(this.value)">
+        <option value="">Select Type</option>
+        <option value="single">Single</option>
+        <option value="team">Team</option>
+      </select>
+    </div>
+
+    <!-- Team Size (only if team is selected) -->
+    <div id="team_size_section" style="display: none;">
+      <div class="form-group">
+        <label for="team_min">Minimum Team Size </label>
+        <input type="number" class="form-control" id="team_min" name="team_min">
+      </div>
+      <div class="form-group">
+        <label for="team_max">Maximum Team Size </label>
+        <input type="number" class="form-control" id="team_max" name="team_max">
+      </div>
+    </div>
+
+    <!-- Show (Select Responsible Faculties) -->
+    <div class="form-group">
+      <label for="show">Responsible Faculty/Coordinator </label>
+      <select class="form-control" id="show" name="show" multiple required>
+        {% for faculty in faculty_list %}
+          <option value="{{ faculty.id }}">{{ faculty.name }}</option>
+        {% endfor %}
+      </select>
+      <small class="form-text text-muted">Hold Ctrl or Cmd to select multiple.</small>
+    </div>
+
+    <!-- Maximum Total Participants -->
+    <div class="form-group">
+      <label for="max_participants">Max Total Participants</label>
+      <input type="number" class="form-control" id="max_participants" name="max_participants" required>
+    </div>
+
+    <!-- Event Date and Time -->
+<div class="form-group">
+  <label for="event_date">Event Date </label>
+  <input type="date" class="form-control" id="event_date" name="event_date" required>
+</div>
+
+<div class="form-group">
+  <label for="event_time">Event Time </label>
+  <input type="time" class="form-control" id="event_time" name="event_time" required>
+</div>
+
+<!-- Event Location -->
+<div class="form-group">
+  <label for="location">Event Location </label>
+  <input type="text" class="form-control" id="location" name="location" placeholder="Enter location" required>
+</div>
+
+<!-- Contact Information -->
+<div class="form-group">
+  <label for="contact_info">Contact Information </label>
+  <textarea class="form-control" id="contact_info" name="contact_info" rows="4" placeholder="Enter names of faculty/student coordinators, links, or other contact details..." required></textarea>
+</div>
+    <!-- Event Template / Thumbnail Upload -->
+    <div class="form-group">
+      <label for="event_thumbnail">Upload Event Thumbnail</label>
+      <input type="file" class="form-control-file" id="event_thumbnail" name="event_thumbnail" required>
+    </div>
+
+    <!-- Event Type -->
+<div class="form-group">
+  <label for="event_type">Event Type</label>
+  <select class="form-control" id="event_type" name="event_type" required>
+    <option value="">Select Event</option>
+    <option value="coding">Coding</option>
+    <option value="debugging">Debugging</option>
+    <option value="web_design">Web Design</option>
+    <option value="app_dev">App Development</option>
+    <option value="uiux">UI/UX Design</option>
+    <option value="robotics">Robotics</option>
+    <option value="circuit_design">Circuit Design</option>
+    <option value="project_expo">Project Expo</option>
+    <option value="startup_pitch">Startup Pitch</option>
+    <option value="quiz">Quiz</option>
+    <option value="paper_presentation">Paper Presentation</option>
+    <option value="poster_presentation">Poster Presentation</option>
+    <option value="hackathon">Hackathon</option>
+    <option value="ideathon">Ideathon</option>
+    <option value="seminar">Seminar</option>
+    <option value="workshop">Workshop</option>
+    <option value="treasure_hunt">Treasure Hunt</option>
+    <option value="gaming">Gaming</option>
+    <option value="bgmi">BGMI</option>
+    <option value="valorant">Valorant</option>
+    <option value="chess">Chess</option>
+    <option value="carrom">Carrom</option>
+    <option value="cricket">Cricket</option>
+    <option value="football">Football</option>
+    <option value="kabaddi">Kabaddi</option>
+    <option value="volleyball">Volleyball</option>
+    <option value="throwball">Throwball</option>
+    <option value="athletics">Athletics</option>
+    <option value="dance">Dance</option>
+    <option value="singing">Singing</option>
+    <option value="instrumental_music">Instrumental Music</option>
+    <option value="mime">Mime</option>
+    <option value="drama">Drama</option>
+    <option value="street_play">Street Play</option>
+    <option value="fashion_show">Fashion Show</option>
+    <option value="debate">Debate</option>
+    <option value="group_discussion">Group Discussion</option>
+    <option value="elocution">Elocution</option>
+    <option value="essay_writing">Essay Writing</option>
+    <option value="poetry">Poetry</option>
+    <option value="standup_comedy">Stand-up Comedy</option>
+    <option value="mimicry">Mimicry</option>
+    <option value="face_painting">Face Painting</option>
+    <option value="mehendi">Mehendi</option>
+    <option value="rangoli">Rangoli</option>
+    <option value="photography">Photography</option>
+    <option value="videography">Videography</option>
+    <option value="short_film">Short Film</option>
+    <option value="arts_craft">Arts & Craft</option>
+    <option value="tshirt_painting">T-Shirt Painting</option>
+    <option value="slogan_writing">Slogan Writing</option>
+    <option value="story_telling">Story Telling</option>
+    <option value="logo_design">Logo Design</option>
+    <option value="reels">Reels Creation</option>
+    <option value="digital_art">Digital Art</option>
+  </select>
+</div>
+
+    <!-- Event Rules -->
+    <div class="form-group">
+      <label>Event Rules </label>
+      <div id="rules_container">
+        <input type="text" class="form-control mb-2" name="rules[]" placeholder="Enter Rule" required>
+      </div>
+      <button type="button" class="btn btn-secondary btn-sm mt-1" onclick="addRule()">Add More Rule</button>
+    </div>
+
+    <!-- Additional Info -->
+    <div class="form-group">
+      <label for="extra_info">Additional Information</label>
+      <textarea class="form-control" id="extra_info" name="extra_info" rows="3"></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Create Event</button>
+  </form>
+</div>
+
+<!-- Inline JavaScript -->
+<script>
+  function toggleTeamSize(value) {
+    document.getElementById('team_size_section').style.display = value === 'team' ? 'block' : 'none';
+    document.getElementById('team_min').required = value === 'team';
+    document.getElementById('team_max').required = value === 'team';
+  }
+
+  function addRule() {
+    const container = document.getElementById('rules_container');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = 'rules[]';
+    input.className = 'form-control mb-2';
+    input.placeholder = 'Enter Rule';
+    input.required = true;
+    container.appendChild(input);
+  }
+</script>
+{% endblock %}
